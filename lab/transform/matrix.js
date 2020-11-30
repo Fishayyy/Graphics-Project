@@ -180,11 +180,31 @@ class Matrix
 	static view(eye, target, up)
 	{
 		// TODO
+		let back = eye.subtract(target, false)
+		back.normalize()
+
+		let right = Vector.cross(up, back)
+		right.normalize()
+
+		let upLocal = Vector.cross(back, right)
+
+		return new Float32Array([
+				right.x, upLocal.x, back.x, 0,
+				right.y, upLocal.y, back.y, 0,
+				right.z, upLocal.z, back.z, 0,
+				Vector.dot(right.inverse(), eye), Vector.dot(upLocal.inverse(), eye), Vector.dot(back.inverse(), eye), 1
+			]);
 	}
 
 	static perspective(viewRadians=Math.PI/4, aspect=1, near=0.01, far=1000.0)
 	{
 		// TODO
+		return new Float32Array([
+			1/(aspect*Math.tan(viewRadians/2)), 0, 0, 0,
+			0, 1/Math.tan(viewRadians/2), 0, 0,
+			0, 0, (near+far)/(near-far), -1,
+			0, 0, (2*near*far)/(near-far), 0
+		]);
 	}
 
 	static orthographic(left=-2, right=2, bottom=-2, top=2, near=0.1, far=1000.0)
