@@ -113,12 +113,12 @@ const RunDemo = function (filemap)
 	const objAmbient = 1.0;
 	const objShininess = 1.0;
 
-	const horseModelData = parseObjText(filemap['horseOBJ'])
+	const horseModelData = parseObjText(filemap['horseOBJ']);
 	const horseMaterial = new UVMaterial(
 		gl,
 		uvProgram,
 		'horse-texture',
-		true,
+		true, // Flip texture
 		objDiffuse,
 		objSpecular,
 		objAmbient,
@@ -130,8 +130,50 @@ const RunDemo = function (filemap)
 		horseModelData.positions,
 		horseModelData.normals,
 		horseModelData.index,
-		horseModelData.texcoords,
+		horseModelData.texcoords, // uv data
 		horseMaterial
+	);
+
+	const wagonModelData = parseObjText(filemap['wagonOBJ']);
+	const wagonMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'wood-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const wagon = new UVMesh(
+		gl,
+		wagonModelData.positions,
+		wagonModelData.normals,
+		wagonModelData.index,
+		wagonModelData.texcoords,
+		wagonMaterial
+	);
+
+	const npc01poseData = parseObjText(filemap['npc01poseOBJ']);
+	const npc01poseMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'wood-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const npc01pose = new UVMesh(
+		gl,
+		npc01poseData.positions,
+		npc01poseData.normals,
+		npc01poseData.index,
+		npc01poseData.texcoords,
+		npc01poseMaterial
 	);
 
 	// // create material for earth
@@ -218,6 +260,10 @@ const RunDemo = function (filemap)
 
 		horse.draw();
 
+		wagon.draw();
+
+		npc01pose.draw();
+
 		requestAnimationFrame(main);
 	}
 	requestAnimationFrame(main);
@@ -233,7 +279,8 @@ var InitDemo = function()
 		['suzyOBJ', 'models/suzy.obj'],
 		['sceneOBJ', 'models/scene.obj'],
 		['wagonOBJ', 'models/wagon.obj'],
-		['horseOBJ', 'models/horse.obj']
+		['horseOBJ', 'models/horse.obj'],
+		['npc01poseOBJ', 'models/npc01pose.obj']
 	];
 	
 	const importer = new resourceImporter(imports, RunDemo);
