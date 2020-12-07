@@ -106,35 +106,54 @@ const RunDemo = function (filemap)
 
 	emeraldSuzy.translate(new Vector(-2, 0, 0));
 
+
 	// textured earth material properties
-	const earthDiffuse = 0.7;
-	const earthSpecular = 0.3;
-	const earthAmbient = 0.0;
-	const earthShininess = 0.1;
+	const objDiffuse = new Vector(1.0, 1.0, 1.0);
+	const objSpecular = new Vector(1.0, 1.0, 1.0);
+	const objAmbient = new Vector(1.0, 1.0, 1.0);
+	const objShininess = 1.0;
 
 	// create material for earth
-	const earthMaterial = new UVMaterial(
+	const sceneModelData = parseObjText(filemap['sceneOBJ'])
+	const sceneMaterial = new RGBMaterial(
 		gl,
-		uvProgram,
-		'earth-texture',
-		false,
-		earthDiffuse,
-		earthSpecular,
-		earthAmbient,
-		earthShininess
+		rgbProgram,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
 	);
 
-	// create textured earth (sphere)
-	const uvEarth = new UVMesh(
+	const scene = new RGBMesh(
 		gl,
-		Sphere.positionArray(30,30),
-		Sphere.positionArray(30,30),
-		Sphere.indexArray(30,30),
-		Sphere.uvArray(30,30),
-		earthMaterial
+		sceneModelData.positions, sceneModelData.normals,
+		sceneModelData.index,
+		sceneMaterial
 	);
 
-	uvEarth.translate(new Vector(2, 0, 0));
+	// // create material for earth
+	// const earthMaterial = new UVMaterial(
+	// 	gl,
+	// 	uvProgram,
+	// 	'earth-texture',
+	// 	false,
+	// 	earthDiffuse,
+	// 	earthSpecular,
+	// 	earthAmbient,
+	// 	earthShininess
+	// );
+
+	// // create textured earth (sphere)
+	// const uvEarth = new UVMesh(
+	// 	gl,
+	// 	Sphere.positionArray(30,30),
+	// 	Sphere.positionArray(30,30),
+	// 	Sphere.indexArray(30,30),
+	// 	Sphere.uvArray(30,30),
+	// 	earthMaterial
+	// );
+
+	// uvEarth.translate(new Vector(2, 0, 0));
 
 	// set up models to follow point lights
 	const lightSuzy1 = new RGBMesh(
@@ -194,9 +213,7 @@ const RunDemo = function (filemap)
 		lightSuzy2.setPosition(lightPosition.inverse());
 		lightSuzy2.draw();
 
-		emeraldSuzy.draw();
-
-		uvEarth.draw();
+		scene.draw();
 
 		requestAnimationFrame(main);
 	}
@@ -210,8 +227,8 @@ var InitDemo = function()
 		['uvFragShaderText', 'shaders/frag.uv.glsl'],
 		['rgbVertShaderText', 'shaders/vert.rgb.glsl'],
 		['rgbFragShaderText', 'shaders/frag.rgb.glsl'],
-		['suzyOBJ', 'models/suzy.obj']
-
+		['suzyOBJ', 'models/suzy.obj'],
+		['sceneOBJ', 'models/scene.obj']
 	];
 	
 	const importer = new resourceImporter(imports, RunDemo);
