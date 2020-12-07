@@ -22,7 +22,7 @@ const RunDemo = function (filemap)
 	}
 
 	// set background color and clear
-	gl.clearColor(0.0, 0.0, 0.0, 1.0);
+	gl.clearColor(0.5, 0.5, 0.5, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	// set up culling via depth and back face, set front face to CCW
@@ -108,27 +108,30 @@ const RunDemo = function (filemap)
 
 
 	// textured earth material properties
-	const objDiffuse = new Vector(1.0, 1.0, 1.0);
-	const objSpecular = new Vector(1.0, 1.0, 1.0);
-	const objAmbient = new Vector(1.0, 1.0, 1.0);
+	const objDiffuse = 1.0;
+	const objSpecular = 1.0;
+	const objAmbient = 1.0;
 	const objShininess = 1.0;
 
-	// create material for earth
-	const sceneModelData = parseObjText(filemap['sceneOBJ'])
-	const sceneMaterial = new RGBMaterial(
+	const horseModelData = parseObjText(filemap['horseOBJ'])
+	const horseMaterial = new UVMaterial(
 		gl,
-		rgbProgram,
+		uvProgram,
+		'horse-texture',
+		true,
 		objDiffuse,
 		objSpecular,
 		objAmbient,
 		objShininess
 	);
 
-	const scene = new RGBMesh(
+	const horse = new UVMesh(
 		gl,
-		sceneModelData.positions, sceneModelData.normals,
-		sceneModelData.index,
-		sceneMaterial
+		horseModelData.positions,
+		horseModelData.normals,
+		horseModelData.index,
+		horseModelData.texcoords,
+		horseMaterial
 	);
 
 	// // create material for earth
@@ -213,7 +216,7 @@ const RunDemo = function (filemap)
 		lightSuzy2.setPosition(lightPosition.inverse());
 		lightSuzy2.draw();
 
-		scene.draw();
+		horse.draw();
 
 		requestAnimationFrame(main);
 	}
@@ -228,7 +231,9 @@ var InitDemo = function()
 		['rgbVertShaderText', 'shaders/vert.rgb.glsl'],
 		['rgbFragShaderText', 'shaders/frag.rgb.glsl'],
 		['suzyOBJ', 'models/suzy.obj'],
-		['sceneOBJ', 'models/scene.obj']
+		['sceneOBJ', 'models/scene.obj'],
+		['wagonOBJ', 'models/wagon.obj'],
+		['horseOBJ', 'models/horse.obj']
 	];
 	
 	const importer = new resourceImporter(imports, RunDemo);
