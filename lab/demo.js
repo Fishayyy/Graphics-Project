@@ -260,11 +260,32 @@ const RunDemo = function (filemap)
 		rocksMaterial
 	);
 
+	const treesDeadData = parseObjText(filemap['treesDeadOBJ']);
+	const treesDeadMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'tree_bark-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const treesDead = new UVMesh(
+		gl,
+		treesDeadData.positions,
+		treesDeadData.normals,
+		treesDeadData.index,
+		treesDeadData.texcoords,
+		treesDeadMaterial
+	);
+
 	const treesData = parseObjText(filemap['treesOBJ']);
 	const treesMaterial = new UVMaterial(
 		gl,
 		uvProgram,
-		'tree_bark-texture',
+		'tree-texture',
 		true,
 		objDiffuse,
 		objSpecular,
@@ -280,30 +301,6 @@ const RunDemo = function (filemap)
 		treesData.texcoords,
 		treesMaterial
 	);
-
-	// // create material for earth
-	// const earthMaterial = new UVMaterial(
-	// 	gl,
-	// 	uvProgram,
-	// 	'earth-texture',
-	// 	false,
-	// 	earthDiffuse,
-	// 	earthSpecular,
-	// 	earthAmbient,
-	// 	earthShininess
-	// );
-
-	// // create textured earth (sphere)
-	// const uvEarth = new UVMesh(
-	// 	gl,
-	// 	Sphere.positionArray(30,30),
-	// 	Sphere.positionArray(30,30),
-	// 	Sphere.indexArray(30,30),
-	// 	Sphere.uvArray(30,30),
-	// 	earthMaterial
-	// );
-
-	// uvEarth.translate(new Vector(2, 0, 0));
 
 	// set up models to follow point lights
 	const lightSuzy1 = new RGBMesh(
@@ -372,6 +369,7 @@ const RunDemo = function (filemap)
 		npc03pose.draw();
 		mountain.draw();
 		rocks.draw();
+		treesDead.draw();
 		trees.draw();
 
 		requestAnimationFrame(main);
@@ -395,7 +393,8 @@ var InitDemo = function()
 		['npc03poseOBJ', 'models/npc03pose.obj'],
 		['mountainOBJ', 'models/terrain.obj'],
 		['rocksOBJ', 'models/rocks_placed.obj'],
-		['treesOBJ', 'models/trees01_placed.obj']
+		['treesDeadOBJ', 'models/trees01_placed.obj'],
+		['treesOBJ', 'models/trees02_placed.obj']
 	];
 	
 	const importer = new resourceImporter(imports, RunDemo);
