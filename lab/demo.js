@@ -159,7 +159,7 @@ const RunDemo = function (filemap)
 	const npc01poseMaterial = new UVMaterial(
 		gl,
 		uvProgram,
-		'wood-texture',
+		'npc02-texture',
 		true,
 		objDiffuse,
 		objSpecular,
@@ -174,6 +174,111 @@ const RunDemo = function (filemap)
 		npc01poseData.index,
 		npc01poseData.texcoords,
 		npc01poseMaterial
+	);
+
+	const npc02poseData = parseObjText(filemap['npc02poseOBJ']);
+	const npc02poseMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'npc02-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const npc02pose = new UVMesh(
+		gl,
+		npc02poseData.positions,
+		npc02poseData.normals,
+		npc02poseData.index,
+		npc02poseData.texcoords,
+		npc02poseMaterial
+	);
+
+	const npc03poseData = parseObjText(filemap['npc03poseOBJ']);
+	const npc03poseMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'npc02-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const npc03pose = new UVMesh(
+		gl,
+		npc03poseData.positions,
+		npc03poseData.normals,
+		npc03poseData.index,
+		npc03poseData.texcoords,
+		npc03poseMaterial
+	);
+
+	const mountainData = parseObjText(filemap['mountainOBJ']);
+	const mountainMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'dirt-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const mountain = new UVMesh(
+		gl,
+		mountainData.positions,
+		mountainData.normals,
+		mountainData.index,
+		mountainData.texcoords,
+		mountainMaterial
+	);
+
+	const rocksData = parseObjText(filemap['rocksOBJ']);
+	const rocksMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'rock-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const rocks = new UVMesh(
+		gl,
+		rocksData.positions,
+		rocksData.normals,
+		rocksData.index,
+		rocksData.texcoords,
+		rocksMaterial
+	);
+
+	const treesData = parseObjText(filemap['treesOBJ']);
+	const treesMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'tree_bark-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const trees = new UVMesh(
+		gl,
+		treesData.positions,
+		treesData.normals,
+		treesData.index,
+		treesData.texcoords,
+		treesMaterial
 	);
 
 	// // create material for earth
@@ -263,6 +368,11 @@ const RunDemo = function (filemap)
 		wagon.draw();
 
 		npc01pose.draw();
+		npc02pose.draw();
+		npc03pose.draw();
+		mountain.draw();
+		rocks.draw();
+		trees.draw();
 
 		requestAnimationFrame(main);
 	}
@@ -280,7 +390,12 @@ var InitDemo = function()
 		['sceneOBJ', 'models/scene.obj'],
 		['wagonOBJ', 'models/wagon.obj'],
 		['horseOBJ', 'models/horse.obj'],
-		['npc01poseOBJ', 'models/npc01pose.obj']
+		['npc01poseOBJ', 'models/npc01pose.obj'],
+		['npc02poseOBJ', 'models/npc02pose.obj'],
+		['npc03poseOBJ', 'models/npc03pose.obj'],
+		['mountainOBJ', 'models/terrain.obj'],
+		['rocksOBJ', 'models/rocks_placed.obj'],
+		['treesOBJ', 'models/trees01_placed.obj']
 	];
 	
 	const importer = new resourceImporter(imports, RunDemo);
