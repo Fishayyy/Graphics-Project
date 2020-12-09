@@ -66,52 +66,23 @@ const RunDemo = function (filemap)
 	camera.lookAt(new Vector(), new Vector(0, 1, 0));
 
 	// set ambient light parameters
-	const ambientLight = new Vector(0.4, 0.5, 0.4);
+	const ambientLight = new Vector(1.0, 1.0, 1.0);
 
 	// set up point lights' parameters
-	const pointLightPosition = new Vector(0, 0, 0);
-	const pointLightDiffuse = new Vector(1, 1, 4);
-	const pointLightSpecular = new Vector(1, 4, 1);
+	const directionalLightDirection = new Vector(0, -1, 0);
+	const directionalLightDiffuse = new Vector(0.8, 0.8, 0.8);
+	const directionalLightSpecular = new Vector(0.3, 0.3, 0.3);
 
 	// use light manager to create lights
 	const lightManager = new LightManager(gl, shaders, ambientLight);
-	lightManager.addPointLight(pointLightPosition, pointLightDiffuse, pointLightSpecular);
-	lightManager.addPointLight(pointLightPosition, pointLightDiffuse, pointLightSpecular);
+	lightManager.addDirectionalLight(directionalLightDirection, directionalLightDiffuse, directionalLightSpecular);
 	lightManager.update();
 
-	// rgb emerald material properties
-	const emeraldDiffuse = new Vector(0.07568, 0.61424, 0.07568);
-	const emeraldSpecular = new Vector(0.633, 0.727811, 0.633);
-	const emeraldAmbient = new Vector(0.0215, 0.1745, 0.0215);
-	const emeraldShininess = 0.6;
-
-	// create material with emerald properties
-	const emeraldMaterial = new RGBMaterial(
-		gl,
-		rgbProgram,
-		emeraldDiffuse,
-		emeraldSpecular,
-		emeraldAmbient,
-		emeraldShininess
-	);
-
-	// create emerald monkey head
-	const suzyModelData = parseObjText(filemap['suzyOBJ'])
-	const emeraldSuzy = new RGBMesh(
-		gl,
-		suzyModelData.positions, suzyModelData.normals,
-		suzyModelData.index,
-		emeraldMaterial
-	);
-
-	emeraldSuzy.translate(new Vector(-2, 0, 0));
-
-
-	// textured earth material properties
-	const objDiffuse = 1.0;
-	const objSpecular = 1.0;
-	const objAmbient = 1.0;
-	const objShininess = 1.0;
+	// Global material properties
+	const objDiffuse = 0.7;
+	const objSpecular = 0.0;
+	const objAmbient = 0.1;
+	const objShininess = 0.0;
 
 	const horseModelData = parseObjText(filemap['horseOBJ']);
 	const horseMaterial = new UVMaterial(
@@ -302,16 +273,21 @@ const RunDemo = function (filemap)
 		treesMaterial
 	);
 
+	const skyDiffuse = 1.0;
+	const skySpecular = 0.0;
+	const skyAmbient = 1.0;
+	const skyShininess = 0.0;
+
 	const skyboxData = parseObjText(filemap['skyboxOBJ']);
 	const skyboxMaterial = new UVMaterial(
 		gl,
 		uvProgram,
 		'skybox-texture',
 		true,
-		objDiffuse,
-		objSpecular,
-		objAmbient,
-		objShininess
+		skyDiffuse,
+		skySpecular,
+		skyAmbient,
+		skyShininess
 	);
 
 	const skybox = new UVMesh(
@@ -323,68 +299,16 @@ const RunDemo = function (filemap)
 		skyboxMaterial
 	);
 
-	// set up models to follow point lights
-	const lightSuzy1 = new RGBMesh(
-		gl,
-		suzyModelData.positions, suzyModelData.normals,
-		suzyModelData.index,
-		emeraldMaterial
-	);
-
-	lightSuzy1.setScale(new Vector(0.1, 0.1, 0.1));
-
-	const lightSuzy2 = new RGBMesh(
-		gl,
-		suzyModelData.positions, suzyModelData.normals,
-		suzyModelData.index,
-		emeraldMaterial
-	);
-
-	lightSuzy2.setScale(new Vector(0.1, 0.1, 0.1));
-
-	// set up some arbitrary constants for motion
-	const startTime = Date.now();
-	let time;
-	let k_theta = 1/1000;
-	let k_alpha = 1/3101;
-	let hr = 5;
-	let vr = 2;
-	let theta;
-	let alpha;
-	let cosTheta;
-	let lightPosition;
-
 	var main = function()
 	{
 		gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
-		time = Date.now() - startTime;
-		theta = time * k_theta;
-		alpha = time * k_alpha;
-		cosTheta = Math.cos(theta);
-
-		lightPosition = new Vector(
-			hr*cosTheta*Math.sin(alpha),
-			vr*Math.sin(2*theta),
-			vr*cosTheta*Math.cos(alpha)
-		);
-
-		lightManager.pointLights[0].setPosition(lightPosition);
-		lightManager.pointLights[1].setPosition(lightPosition.inverse());
 		lightManager.update();
 
 		camera.update();
 
-		lightSuzy1.setPosition(lightPosition);
-		lightSuzy1.draw();
-
-		lightSuzy2.setPosition(lightPosition.inverse());
-		lightSuzy2.draw();
-
 		horse.draw();
-
 		wagon.draw();
-
 		npc01pose.draw();
 		npc02pose.draw();
 		npc03pose.draw();
@@ -406,8 +330,6 @@ var InitDemo = function()
 		['uvFragShaderText', 'shaders/frag.uv.glsl'],
 		['rgbVertShaderText', 'shaders/vert.rgb.glsl'],
 		['rgbFragShaderText', 'shaders/frag.rgb.glsl'],
-		['suzyOBJ', 'models/suzy.obj'],
-		['sceneOBJ', 'models/scene.obj'],
 		['wagonOBJ', 'models/wagon.obj'],
 		['horseOBJ', 'models/horse.obj'],
 		['npc01poseOBJ', 'models/npc01pose.obj'],
