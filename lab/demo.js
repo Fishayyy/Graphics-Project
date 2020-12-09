@@ -302,6 +302,27 @@ const RunDemo = function (filemap)
 		treesMaterial
 	);
 
+	const skyboxData = parseObjText(filemap['skyboxOBJ']);
+	const skyboxMaterial = new UVMaterial(
+		gl,
+		uvProgram,
+		'skybox-texture',
+		true,
+		objDiffuse,
+		objSpecular,
+		objAmbient,
+		objShininess
+	);
+
+	const skybox = new UVMesh(
+		gl,
+		skyboxData.positions,
+		skyboxData.normals,
+		skyboxData.index,
+		skyboxData.texcoords,
+		skyboxMaterial
+	);
+
 	// set up models to follow point lights
 	const lightSuzy1 = new RGBMesh(
 		gl,
@@ -371,6 +392,7 @@ const RunDemo = function (filemap)
 		rocks.draw();
 		treesDead.draw();
 		trees.draw();
+		skybox.draw();
 
 		requestAnimationFrame(main);
 	}
@@ -394,7 +416,8 @@ var InitDemo = function()
 		['mountainOBJ', 'models/terrain.obj'],
 		['rocksOBJ', 'models/rocks_placed.obj'],
 		['treesDeadOBJ', 'models/trees01_placed.obj'],
-		['treesOBJ', 'models/trees02_placed.obj']
+		['treesOBJ', 'models/trees02_placed.obj'],
+		['skyboxOBJ', 'models/skybox.obj']
 	];
 	
 	const importer = new resourceImporter(imports, RunDemo);
