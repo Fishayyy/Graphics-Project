@@ -159,7 +159,7 @@ const RunDemo = function (filemap)
 	const npc01poseMaterial = new UVMaterial(
 		gl,
 		uvProgram,
-		'npc02-texture',
+		'npc01-texture',
 		true,
 		objDiffuse,
 		objSpecular,
