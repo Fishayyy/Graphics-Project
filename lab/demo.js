@@ -1,3 +1,7 @@
+// Austin Fisher
+// Jeff Romero
+// Royce Shropshire
+
 
 const RunDemo = function (filemap)
 {
@@ -66,11 +70,11 @@ const RunDemo = function (filemap)
 	camera.lookAt(new Vector(), new Vector(0, 1, 0));
 
 	// set ambient light parameters
-	const ambientLight = new Vector(1.0, 1.0, 1.0);
+	const ambientLight = new Vector(0.4, 0.4, 0.4);
 
 	// set up point lights' parameters
 	const directionalLightDirection = new Vector(0, -1, 0);
-	const directionalLightDiffuse = new Vector(0.8, 0.8, 0.8);
+	const directionalLightDiffuse = new Vector(0.7, 0.7, 0.7);
 	const directionalLightSpecular = new Vector(0.3, 0.3, 0.3);
 
 	// use light manager to create lights
@@ -79,9 +83,9 @@ const RunDemo = function (filemap)
 	lightManager.update();
 
 	// Global material properties
-	const objDiffuse = 0.7;
-	const objSpecular = 0.0;
-	const objAmbient = 0.1;
+	const objDiffuse = 0.5;
+	const objSpecular = 0.1;
+	const objAmbient = 0.3;
 	const objShininess = 0.0;
 
 	const horseModelData = parseObjText(filemap['horseOBJ']);
